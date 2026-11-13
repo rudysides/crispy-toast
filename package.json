@@ -1,6 +1,6 @@
 {
   "name": "crispy-toast",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Native toasts for every platform",
   "type": "module",
   "main": "./dist/index.js",
