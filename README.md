@@ -1,1 +1,1 @@
-Crispy Toast - Cross-platform Toast package
+Crispy Toast - Native toasts for every platfom
