@@ -5,12 +5,13 @@
 	"keywords": [
 		"alert",
 		"expo",
-		"native",
+		"macos",
 		"nextjs",
 		"notification",
-		"react-dom",
 		"react-native",
-		"toast"
+		"react-native-web",
+		"toast",
+		"windows"
 	],
 	"license": "MIT",
 	"author": "BitWebs",

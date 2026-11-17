@@ -8,15 +8,14 @@
   Native toasts for every platform.
 </p>
 
-> ⚠️ Work in progress — the API may still change before 1.0.
+Toasts and iOS-style alerts with **one API everywhere**: iOS, Android, web, macOS and Windows.
 
-Toasts and iOS-style alerts with **one API everywhere**: iOS, Android and web.
 Zero runtime dependencies, no native code (works in Expo Go).
 
-| Import             | Use it in                        | Renders with                                                 |
-| ------------------ | -------------------------------- | ------------------------------------------------------------ |
-| `crispy-toast`     | React Native / Expo              | `View`, `Text`, `Animated`, `Modal` (iOS, Android, Expo web) |
-| `crispy-toast/web` | Next.js, Vite, any React DOM app | HTML, CSS and a native `<dialog>`                            |
+| Import             | Use it in                        | Renders with                                                                  |
+| ------------------ | -------------------------------- | ----------------------------------------------------------------------------- |
+| `crispy-toast`     | React Native / Expo              | `View`, `Text`, `Animated`, `Modal` (iOS, Android, macOS, Windows, Expo web)  |
+| `crispy-toast/web` | Next.js, Vite, any React DOM app | HTML, CSS and a native `<dialog>`                                             |
 
 ## Install
 
@@ -26,7 +25,7 @@ Zero runtime dependencies, no native code (works in Expo Go).
 npx expo install crispy-toast react-native-safe-area-context
 ```
 
-Every Expo template already includes `react-native-safe-area-context`.
+`react-native-safe-area-context` is included in all Expo templates by default.
 
 ### Next.js / Vite
 
@@ -34,17 +33,18 @@ Every Expo template already includes `react-native-safe-area-context`.
 npm i crispy-toast
 ```
 
-No CSS import needed: `<Toaster />` ships its own styles.
+No stylesheet import is required; `<Toaster />` includes its own styles.
 
-### macOS and Windows (experimental)
+### React Native macOS / Windows
 
 ```sh
 npm i crispy-toast
 ```
 
-That's it: desktop windows have no safe area, so `react-native-safe-area-context` isn't used there.
+Known limitations on macOS:
 
-react-native-macos has no `Modal`, so there the alert is drawn inside `<Toaster />`. Render `<Toaster />` at the root of your app so the alert covers the whole window. Escape doesn't close the alert on macOS yet.
+- `react-native-macos` does not provide `Modal`, so alerts are rendered inside `<Toaster />`. Mount `<Toaster />` at the root of your app so alerts cover the entire window.
+- The Escape key does not dismiss alerts yet.
 
 ## Usage
 
@@ -125,18 +125,18 @@ Also available as `toast.success`, `toast.error`, `toast.warning` and `toast.inf
 
 ### `<Toaster />`
 
-| Prop            | Default        | Description                                                                             |
-| --------------- | -------------- | --------------------------------------------------------------------------------------- |
-| `position`      | `"top-center"` | `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`   |
-| `duration`      | `4000`         | Default duration in milliseconds.                                                       |
-| `visibleToasts` | `3`            | How many toasts are shown at once.                                                      |
-| `offset`        | `16`           | Distance from the safe area edge.                                                       |
-| `theme`         | `"system"`     | `light`, `dark` or `system`.                                                            |
-| `colors`        | —              | Override any theme color (see below).                                                   |
-| `icons`         | —              | Replace the built-in icon per type, e.g. `{ success: CheckIcon }`. See [Icons](#icons). |
-| `textStyle`     | —              | Applied to every text, e.g. `{ fontFamily: "Inter" }`.                                  |
-| `toastStyle`    | —              | Applied to every toast.                                                                 |
-| `alertStyle`    | —              | Applied to the alert card.                                                              |
+| Prop            | Default           | Description                                                                             |
+| --------------- | ----------------- | --------------------------------------------------------------------------------------- |
+| `position`      | `"bottom-center"` | `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`   |
+| `duration`      | `4000`            | Default duration in milliseconds.                                                       |
+| `visibleToasts` | `3`               | How many toasts are shown at once.                                                      |
+| `offset`        | `16`              | Distance from the safe area edge.                                                       |
+| `theme`         | `"system"`        | `light`, `dark` or `system`.                                                            |
+| `colors`        | —                 | Override any theme color (see below).                                                   |
+| `icons`         | —                 | Replace the built-in icon per type, e.g. `{ success: CheckIcon }`. See [Icons](#icons). |
+| `textStyle`     | —                 | Applied to every text, e.g. `{ fontFamily: "Inter" }`.                                  |
+| `toastStyle`    | —                 | Applied to every toast.                                                                 |
+| `alertStyle`    | —                 | Applied to the alert card.                                                              |
 
 On phones a toast spans the screen width, so left, center and right look the same. The difference shows on tablets and the web.
 

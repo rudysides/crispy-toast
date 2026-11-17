@@ -30,7 +30,7 @@ export interface ToasterProps {
 }
 
 export function Toaster({
-	position = "top-center",
+	position = "bottom-center",
 	duration = 4000,
 	visibleToasts = 3,
 	offset = 16,
