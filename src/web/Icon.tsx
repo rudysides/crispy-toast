@@ -6,6 +6,7 @@ import type { ToastIcon, ToastType } from "../core/types.js";
 export function Icon({ type, icon }: { type: ToastType; icon?: ToastIcon }) {
 	if (icon === undefined) {
 		if (type === "default") return null;
+		if (type === "loading") return <span data-icon="" data-spinner="" aria-hidden="true" />;
 		return (
 			<span data-icon="" aria-hidden="true">
 				{ICON_GLYPHS[type]}

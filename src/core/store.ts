@@ -1,13 +1,11 @@
-import type { AlertData, AlertOptions, ToastData, ToastOptions, ToastType } from "./types.js";
+import type { ToastData, ToastOptions, ToastType } from "./types.js";
 
 export interface ToasterState {
 	toasts: ToastData[];
-	/** Queue of alerts; only the first one is shown. */
-	alerts: AlertData[];
 }
 
 export function createStore() {
-	let state: ToasterState = { toasts: [], alerts: [] };
+	let state: ToasterState = { toasts: [] };
 	const listeners = new Set<() => void>();
 	let counter = 0;
 
@@ -65,18 +63,6 @@ export function createStore() {
 		remove(id: string) {
 			if (!state.toasts.some((toast) => toast.id === id && toast.dismissed)) return;
 			setState({ ...state, toasts: state.toasts.filter((toast) => toast.id !== id) });
-		},
-
-		showAlert(options: AlertOptions): string {
-			const id = `alert-${++counter}`;
-			const buttons = options.buttons?.length ? options.buttons : [{ text: "OK" }];
-			setState({ ...state, alerts: [...state.alerts, { ...options, id, buttons }] });
-			return id;
-		},
-
-		closeAlert(id: string) {
-			if (!state.alerts.some((alert) => alert.id === id)) return;
-			setState({ ...state, alerts: state.alerts.filter((alert) => alert.id !== id) });
 		},
 	};
 }

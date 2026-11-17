@@ -9,7 +9,6 @@ import type {
 	ToasterColors,
 	ToasterIcons,
 } from "../core/types.js";
-import { AlertModal } from "./AlertModal.js";
 // No extension, so Metro picks insets.macos.js / insets.windows.js there and the app
 // doesn't need react-native-safe-area-context on desktop.
 import { useInsets } from "./insets";
@@ -26,10 +25,9 @@ export interface ToasterProps {
 	colors?: Partial<ToasterColors>;
 	/** Replaces the built-in icon per type, e.g. `{ success: CheckIcon }`. */
 	icons?: ToasterIcons;
-	/** Applied to every text in toasts and alerts, e.g. `{ fontFamily: "Inter" }`. */
+	/** Applied to every text in toasts, e.g. `{ fontFamily: "Inter" }`. */
 	textStyle?: StyleProp<TextStyle>;
 	toastStyle?: StyleProp<ViewStyle>;
-	alertStyle?: StyleProp<ViewStyle>;
 }
 
 const ALIGN = { left: "flex-start", center: "center", right: "flex-end" } as const;
@@ -44,9 +42,8 @@ export function Toaster({
 	icons,
 	textStyle,
 	toastStyle,
-	alertStyle,
 }: ToasterProps) {
-	const { toasts, alerts } = useToasterState();
+	const { toasts } = useToasterState();
 	const systemScheme = useColorScheme();
 	const insets = useInsets();
 	const scheme = theme === "system" ? (systemScheme === "dark" ? "dark" : "light") : theme;
@@ -54,38 +51,30 @@ export function Toaster({
 	const { vertical, horizontal } = parsePosition(position);
 
 	return (
-		<>
-			<View
-				style={[
-					styles.container,
-					vertical === "top"
-						? { top: insets.top + offset }
-						: { bottom: insets.bottom + offset, flexDirection: "column-reverse" },
-					{ alignItems: ALIGN[horizontal] },
-				]}
-			>
-				{toasts.map((toast, index) => (
-					<ToastItem
-						key={toast.id}
-						// The native `toast` export only accepts native styles.
-						toast={toast as ToastData<StyleProp<ViewStyle>>}
-						hidden={index >= visibleToasts}
-						duration={duration}
-						vertical={vertical}
-						colors={palette}
-						icons={icons}
-						textStyle={textStyle}
-						toastStyle={toastStyle}
-					/>
-				))}
-			</View>
-			<AlertModal
-				alert={alerts[0]}
-				colors={palette}
-				textStyle={textStyle}
-				alertStyle={alertStyle}
-			/>
-		</>
+		<View
+			style={[
+				styles.container,
+				vertical === "top"
+					? { top: insets.top + offset }
+					: { bottom: insets.bottom + offset, flexDirection: "column-reverse" },
+				{ alignItems: ALIGN[horizontal] },
+			]}
+		>
+			{toasts.map((toast, index) => (
+				<ToastItem
+					key={toast.id}
+					// The native `toast` export only accepts native styles.
+					toast={toast as ToastData<StyleProp<ViewStyle>>}
+					hidden={index >= visibleToasts}
+					duration={duration}
+					vertical={vertical}
+					colors={palette}
+					icons={icons}
+					textStyle={textStyle}
+					toastStyle={toastStyle}
+				/>
+			))}
+		</View>
 	);
 }
 

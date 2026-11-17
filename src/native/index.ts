@@ -10,11 +10,10 @@ export type ToastOptions = CoreToastOptions<StyleProp<ViewStyle>>;
 
 export { Toaster } from "./Toaster.js";
 export type { ToasterProps } from "./Toaster.js";
-export type { ToastApi } from "../core/toast.js";
+export type { PromiseMessages, ToastApi } from "../core/toast.js";
 export type {
-	AlertButton,
-	AlertOptions,
 	Theme,
+	ToastAction,
 	ToastPosition,
 	ToastIcon,
 	ToastType,

@@ -8,14 +8,14 @@
   Native toasts for every platform.
 </p>
 
-Toasts and iOS-style alerts with **one API everywhere**: iOS, Android, web, macOS and Windows.
+Toasts with **one API everywhere**: iOS, Android, web, macOS and Windows.
 
 Zero runtime dependencies, no native code (works in Expo Go).
 
-| Import             | Use it in                        | Renders with                                                                  |
-| ------------------ | -------------------------------- | ----------------------------------------------------------------------------- |
-| `crispy-toast`     | React Native / Expo              | `View`, `Text`, `Animated`, `Modal` (iOS, Android, macOS, Windows, Expo web)  |
-| `crispy-toast/web` | Next.js, Vite, any React DOM app | HTML, CSS and a native `<dialog>`                                             |
+| Import             | Use it in                        | Renders with                                                        |
+| ------------------ | -------------------------------- | ------------------------------------------------------------------- |
+| `crispy-toast`     | React Native / Expo              | `View`, `Text`, `Animated` (iOS, Android, macOS, Windows, Expo web) |
+| `crispy-toast/web` | Next.js, Vite, any React DOM app | HTML and CSS                                                        |
 
 ## Install
 
@@ -41,11 +41,6 @@ No stylesheet import is required; `<Toaster />` includes its own styles.
 npm i crispy-toast
 ```
 
-Known limitations on macOS:
-
-- `react-native-macos` does not provide `Modal`, so alerts are rendered inside `<Toaster />`. Mount `<Toaster />` at the root of your app so alerts cover the entire window.
-- The Escape key does not dismiss alerts yet.
-
 ## Usage
 
 Render `<Toaster />` once at the root of your app, then call `toast()` from anywhere.
@@ -61,7 +56,7 @@ export default function App() {
   return (
     <>
       <YourApp />
-      <Toaster position="top-center" />
+      <Toaster position="bottom-center" />
     </>
   );
 }
@@ -86,32 +81,40 @@ toast.dismiss("upload"); // one toast
 toast.dismiss(); // all toasts
 ```
 
-### Alert
-
-An iOS-style alert with a dimmed backdrop. The buttons work like React Native's `Alert.alert`.
+### Loading and promises
 
 ```ts
-toast.alert({
-  title: "Delete photo?",
-  message: "This cannot be undone.",
-  buttons: [
-    { text: "Cancel", style: "cancel" },
-    { text: "Delete", style: "destructive", onPress: () => deletePhoto() },
-  ],
+toast.loading("Saving…"); // spinner, stays until updated or dismissed
+
+// Loading → success or error. Returns the same promise, so you can still await it.
+toast.promise(saveSettings(), {
+  loading: "Saving…",
+  success: "Saved",
+  error: (error) => `Could not save: ${error}`,
 });
 ```
 
-- `destructive` buttons are red and `cancel` buttons are bold.
-- Two buttons are shown side by side; three or more are stacked.
-- The Android back button and the Escape key on the web press the `cancel` button.
-- Tapping the backdrop does nothing, just like on iOS.
-- Alerts opened while another one is visible wait in a queue.
+`success` and `error` can be strings or functions that receive the resolved value or the error.
+
+### Actions
+
+```ts
+toast("Photo deleted", {
+  action: { label: "Undo", onPress: () => restorePhoto() },
+});
+```
+
+Pressing the action calls `onPress` and dismisses the toast. The toast's own `onPress` is not called.
+
+### Pausing and keyboard
+
+The timer pauses while the pointer is over a toast (web, macOS, Windows) and, on the web, while it has keyboard focus. On the web, toasts can be reached with Tab: Enter or Space presses the toast and Escape dismisses it.
 
 ## API
 
 ### `toast(message, options?)`
 
-Also available as `toast.success`, `toast.error`, `toast.warning` and `toast.info`. Returns the toast id.
+Also available as `toast.success`, `toast.error`, `toast.warning`, `toast.info` and `toast.loading`. Returns the toast id.
 
 | Option        | Type                         | Description                                                       |
 | ------------- | ---------------------------- | ----------------------------------------------------------------- |
@@ -120,6 +123,7 @@ Also available as `toast.success`, `toast.error`, `toast.warning` and `toast.inf
 | `icon`        | component, element or `null` | Replaces the built-in icon. `null` hides it. See [Icons](#icons). |
 | `duration`    | `number`                     | Milliseconds. `Infinity` keeps the toast until dismissed.         |
 | `style`       | style object                 | `StyleProp<ViewStyle>` on native, `CSSProperties` on web.         |
+| `action`      | `{ label, onPress }`         | A button inside the toast. Pressing it dismisses the toast.       |
 | `onPress`     | `() => void`                 | Called when the toast is tapped. Tapping always dismisses it.     |
 | `onDismiss`   | `() => void`                 | Called when the toast closes, for any reason.                     |
 
@@ -136,7 +140,6 @@ Also available as `toast.success`, `toast.error`, `toast.warning` and `toast.inf
 | `icons`         | —                 | Replace the built-in icon per type, e.g. `{ success: CheckIcon }`. See [Icons](#icons). |
 | `textStyle`     | —                 | Applied to every text, e.g. `{ fontFamily: "Inter" }`.                                  |
 | `toastStyle`    | —                 | Applied to every toast.                                                                 |
-| `alertStyle`    | —                 | Applied to the alert card.                                                              |
 
 On phones a toast spans the screen width, so left, center and right look the same. The difference shows on tablets and the web.
 
@@ -168,18 +171,15 @@ Most apps only need `theme` and a couple of `colors`:
 />
 ```
 
-| Color                                 | Used for                        |
-| ------------------------------------- | ------------------------------- |
-| `background`                          | Toast and alert background      |
-| `text`                                | Titles                          |
-| `muted`                               | Descriptions and alert messages |
-| `border`                              | Toast border, alert dividers    |
-| `overlay`                             | Backdrop behind the alert       |
-| `accent`                              | Default alert buttons           |
-| `destructive`                         | Destructive alert buttons       |
-| `success`, `error`, `warning`, `info` | Icon colors                     |
+| Color                                            | Used for                      |
+| ------------------------------------------------ | ----------------------------- |
+| `background`                                     | Toast background              |
+| `text`                                           | Titles and action button text |
+| `muted`                                          | Descriptions                  |
+| `border`                                         | Toast border, action button   |
+| `success`, `error`, `warning`, `info`, `loading` | Icon colors                   |
 
-For anything else, use `toastStyle`, `alertStyle` or a per-toast `style`. Styles are applied in this order, and the last one wins: defaults → theme → `colors` → `<Toaster>` props → per-toast `style`.
+For anything else, use `toastStyle` or a per-toast `style`. Styles are applied in this order, and the last one wins: defaults → theme → `colors` → `<Toaster>` props → per-toast `style`.
 
 **Web only:** every color is also a CSS variable (`--ct-background`, `--ct-text`, …). Every built-in selector has zero specificity, so your own CSS always wins:
 
@@ -198,7 +198,7 @@ For anything else, use `toastStyle`, `alertStyle` or a per-toast `style`. Styles
 
 ```sh
 pnpm install
-pnpm test        # unit tests (store, timer, icons)
+pnpm test        # unit tests (store, timer, icons) and web component tests
 pnpm lint        # oxlint
 pnpm format      # oxfmt
 pnpm build       # compile to dist/

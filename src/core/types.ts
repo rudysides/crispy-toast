@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 
-export type ToastType = "default" | "success" | "error" | "warning" | "info";
+export type ToastType = "default" | "success" | "error" | "warning" | "info" | "loading";
 
 export type ToastPosition =
 	| "top-left"
@@ -21,6 +21,12 @@ export type ToastIcon = ReactNode | ComponentType<{ size: number; color: string 
 /** Per-type icons that replace the built-in ones. */
 export type ToasterIcons = Partial<Record<ToastType, ToastIcon>>;
 
+export interface ToastAction {
+	label: string;
+	/** Called when the action button is pressed. The toast is dismissed afterwards. */
+	onPress: () => void;
+}
+
 /** `S` is the platform style type: `StyleProp<ViewStyle>` on native, `CSSProperties` on web. */
 export interface ToastOptions<S = unknown> {
 	/** Calling `toast()` again with the same id updates the existing toast. */
@@ -31,6 +37,8 @@ export interface ToastOptions<S = unknown> {
 	/** Milliseconds. `Infinity` keeps the toast until it is dismissed. */
 	duration?: number;
 	style?: S;
+	/** A button inside the toast, e.g. `{ label: "Undo", onPress: undo }`. */
+	action?: ToastAction;
 	onPress?: () => void;
 	onDismiss?: () => void;
 }
@@ -45,38 +53,16 @@ export interface ToastData<S = unknown> extends ToastOptions<S> {
 	version: number;
 }
 
-export interface AlertButton {
-	text: string;
-	style?: "default" | "cancel" | "destructive";
-	onPress?: () => void;
-}
-
-export interface AlertOptions {
-	title: string;
-	message?: string;
-	/** Defaults to a single "OK" button. */
-	buttons?: AlertButton[];
-}
-
-export interface AlertData extends AlertOptions {
-	id: string;
-	buttons: AlertButton[];
-}
-
 export interface ToasterColors {
 	background: string;
 	text: string;
-	/** Description and alert message text. */
+	/** Description text. */
 	muted: string;
+	/** Toast border and action button background. */
 	border: string;
-	/** Backdrop behind the alert. */
-	overlay: string;
-	/** Default alert buttons. */
-	accent: string;
-	/** Destructive alert buttons. */
-	destructive: string;
 	success: string;
 	error: string;
 	warning: string;
 	info: string;
+	loading: string;
 }

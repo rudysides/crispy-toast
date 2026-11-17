@@ -55,18 +55,6 @@ describe("store", () => {
 		expect(store.getSnapshot().toasts.every((t) => t.dismissed)).toBe(true);
 	});
 
-	it("queues alerts and defaults to an OK button", () => {
-		const store = createStore();
-		const first = store.showAlert({ title: "First" });
-		store.showAlert({ title: "Second", buttons: [{ text: "Cancel", style: "cancel" }] });
-		expect(store.getSnapshot().alerts[0]).toMatchObject({
-			title: "First",
-			buttons: [{ text: "OK" }],
-		});
-		store.closeAlert(first);
-		expect(store.getSnapshot().alerts.map((a) => a.title)).toEqual(["Second"]);
-	});
-
 	it("notifies subscribers only on real changes", () => {
 		const store = createStore();
 		const listener = vi.fn();
@@ -74,7 +62,7 @@ describe("store", () => {
 		const id = store.add("default", "Hello");
 		const snapshot = store.getSnapshot();
 		store.remove(id); // not dismissed yet: no-op
-		store.closeAlert("missing");
+		store.dismiss("missing");
 		expect(store.getSnapshot()).toBe(snapshot);
 		expect(listener).toHaveBeenCalledTimes(1);
 		unsubscribe();
@@ -96,8 +84,49 @@ describe("toast", () => {
 		expect(sharedStore.getSnapshot().toasts[0]?.dismissed).toBe(true);
 	});
 
-	it("opens alerts", () => {
-		const id = toast.alert({ title: "Delete?" });
-		expect(sharedStore.getSnapshot().alerts.at(-1)?.id).toBe(id);
+	it("keeps loading toasts until they are updated", () => {
+		const id = toast.loading("Saving…");
+		expect(sharedStore.getSnapshot().toasts[0]).toMatchObject({
+			id,
+			type: "loading",
+			duration: Infinity,
+		});
+		toast.loading("Wait", { duration: 1000 });
+		expect(sharedStore.getSnapshot().toasts[0]?.duration).toBe(1000);
+	});
+
+	it("updates a promise toast to success with the resolved value", async () => {
+		const promise = Promise.resolve(3);
+		const result = toast.promise(promise, {
+			loading: "Uploading…",
+			success: (count) => `${count} files uploaded`,
+			error: "Upload failed",
+		});
+		const id = sharedStore.getSnapshot().toasts[0]?.id;
+		expect(sharedStore.getSnapshot().toasts[0]).toMatchObject({
+			type: "loading",
+			message: "Uploading…",
+		});
+		expect(result).toBe(promise);
+		await result;
+		expect(sharedStore.getSnapshot().toasts[0]).toMatchObject({
+			id,
+			type: "success",
+			message: "3 files uploaded",
+		});
+	});
+
+	it("updates a promise toast to error and keeps the rejection for the caller", async () => {
+		const promise = Promise.reject(new Error("offline"));
+		const result = toast.promise(
+			promise,
+			{ loading: "Uploading…", success: "Done", error: (error) => (error as Error).message },
+			{ id: "upload" },
+		);
+		await expect(result).rejects.toThrow("offline");
+		expect(sharedStore.getSnapshot().toasts.find((t) => t.id === "upload")).toMatchObject({
+			type: "error",
+			message: "offline",
+		});
 	});
 });

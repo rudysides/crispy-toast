@@ -10,8 +10,7 @@ const declarations = (colors: ToasterColors) =>
 		.map(([name, value]) => `${name}:${value};`)
 		.join("");
 
-const themed = (theme: string) =>
-	`:where([data-crispy-toaster][data-theme="${theme}"],[data-crispy-alert][data-theme="${theme}"])`;
+const themed = (theme: string) => `:where([data-crispy-toaster][data-theme="${theme}"])`;
 
 const ENTER_EASING = "cubic-bezier(0.215, 0.61, 0.355, 1)";
 
@@ -22,7 +21,7 @@ const iconColors = Object.keys(ICON_GLYPHS)
 	)
 	.join("\n");
 
-const customIconColors = Object.keys(ICON_GLYPHS)
+const customIconColors = [...Object.keys(ICON_GLYPHS), "loading"]
 	.map(
 		(type) =>
 			`:where([data-crispy-toast][data-type="${type}"] [data-icon][data-custom]){color:var(--ct-${type})}`,
@@ -31,7 +30,7 @@ const customIconColors = Object.keys(ICON_GLYPHS)
 
 // Every selector is wrapped in :where() so any user CSS wins without !important.
 export const CSS = `
-:where([data-crispy-toaster],[data-crispy-alert]){${declarations(palettes.light)}}
+:where([data-crispy-toaster]){${declarations(palettes.light)}}
 ${themed("dark")}{${declarations(palettes.dark)}}
 @media (prefers-color-scheme: dark){${themed("system")}{${declarations(palettes.dark)}}}
 
@@ -50,30 +49,18 @@ ${themed("dark")}{${declarations(palettes.dark)}}
 ${iconColors}
 :where([data-crispy-toast] [data-icon][data-custom]){background:none;border-radius:0;color:var(--ct-text);font-size:18px;font-weight:400}
 ${customIconColors}
-:where([data-crispy-toast] [data-content]){display:flex;flex-direction:column;gap:2px;min-width:0}
+:where([data-crispy-toast]:focus-visible){outline:2px solid var(--ct-info);outline-offset:2px}
+:where([data-crispy-toast] [data-icon][data-spinner]){box-sizing:border-box;background:none;border:2px solid color-mix(in srgb, var(--ct-loading) 30%, transparent);border-top-color:var(--ct-loading);animation:ct-spin 0.8s linear infinite}
+@keyframes ct-spin{to{transform:rotate(360deg)}}
+:where([data-crispy-toast] [data-content]){flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
 :where([data-crispy-toast] [data-title]){font-size:15px;font-weight:600;line-height:1.35}
 :where([data-crispy-toast] [data-description]){font-size:13px;line-height:1.4;color:var(--ct-muted)}
-
-:where([data-crispy-alert]){box-sizing:border-box;width:min(280px, calc(100vw - 32px));max-width:none;padding:0;border:0;border-radius:14px;overflow:hidden;background:var(--ct-background);color:var(--ct-text);text-align:center;transition:opacity ${EXIT_MS}ms ease,transform ${ENTER_MS}ms ${ENTER_EASING},overlay ${EXIT_MS}ms allow-discrete,display ${EXIT_MS}ms allow-discrete}
-:where([data-crispy-alert]:not([open])){opacity:0}
-@starting-style{:where([data-crispy-alert][open]){opacity:0;transform:scale(1.1)}}
-:where([data-crispy-alert])::backdrop{background:var(--ct-overlay, rgba(0,0,0,0.4));transition:opacity ${EXIT_MS}ms ease,overlay ${EXIT_MS}ms allow-discrete,display ${EXIT_MS}ms allow-discrete}
-:where([data-crispy-alert]:not([open]))::backdrop{opacity:0}
-@starting-style{:where([data-crispy-alert][open])::backdrop{opacity:0}}
-:where([data-crispy-alert] [data-content]){display:flex;flex-direction:column;gap:4px;padding:20px 16px 16px}
-:where([data-crispy-alert] [data-title]){margin:0;font-size:17px;font-weight:600;line-height:1.3}
-:where([data-crispy-alert] [data-message]){margin:0;font-size:13px;line-height:1.4;color:var(--ct-muted)}
-:where([data-crispy-alert] [data-buttons]){display:flex;flex-direction:column}
-:where([data-crispy-alert] [data-buttons][data-horizontal]){flex-direction:row}
-:where([data-crispy-alert] button){appearance:none;flex:1;min-height:44px;margin:0;padding:0 8px;border:0;border-top:1px solid var(--ct-border);background:none;color:var(--ct-accent);font:inherit;font-size:17px;cursor:pointer}
-:where([data-crispy-alert] [data-horizontal] button + button){border-left:1px solid var(--ct-border)}
-:where([data-crispy-alert] button:hover,[data-crispy-alert] button:active){background:var(--ct-border)}
-:where([data-crispy-alert] button:focus-visible){outline:2px solid var(--ct-accent);outline-offset:-2px}
-:where([data-crispy-alert] button[data-style="cancel"]){font-weight:600}
-:where([data-crispy-alert] button[data-style="destructive"]){color:var(--ct-destructive)}
+:where([data-crispy-toast] [data-action]){appearance:none;flex:none;margin:0;padding:6px 12px;border:0;border-radius:8px;background:var(--ct-border);color:var(--ct-text);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+:where([data-crispy-toast] [data-action]:hover){background:color-mix(in srgb, var(--ct-text) 13%, transparent)}
+:where([data-crispy-toast] [data-action]:focus-visible){outline:2px solid var(--ct-info);outline-offset:2px}
 
 @media (prefers-reduced-motion: reduce){
-:where([data-crispy-toast],[data-crispy-alert]){transition:none}
-:where([data-crispy-alert])::backdrop{transition:none}
+:where([data-crispy-toast]){transition:none}
+:where([data-crispy-toast] [data-icon][data-spinner]){animation-duration:2.4s}
 }
 `;

@@ -17,7 +17,7 @@ const POSITIONS: ToastPosition[] = [
 const THEMES: Theme[] = ["system", "light", "dark"];
 
 export default function App() {
-	const [position, setPosition] = useState<ToastPosition>("top-center");
+	const [position, setPosition] = useState<ToastPosition>("bottom-center");
 	const [theme, setTheme] = useState<Theme>("system");
 	const [customColors, setCustomColors] = useState(false);
 
@@ -46,27 +46,25 @@ export default function App() {
 						<Button label="Dismiss all" onPress={() => toast.dismiss()} />
 					</Section>
 
-					<Section title="Alert">
+					<Section title="Async">
+						<Button label="Loading" onPress={() => toast.loading("Saving…", { id: "save" })} />
 						<Button
-							label="Delete"
+							label="Promise"
 							onPress={() =>
-								toast.alert({
-									title: "Delete photo?",
-									message: "This cannot be undone.",
-									buttons: [
-										{ text: "Cancel", style: "cancel" },
-										{
-											text: "Delete",
-											style: "destructive",
-											onPress: () => toast.success("Deleted"),
-										},
-									],
+								toast.promise(new Promise<void>((resolve) => setTimeout(() => resolve(), 1500)), {
+									loading: "Uploading…",
+									success: "Uploaded",
+									error: "Upload failed",
 								})
 							}
 						/>
 						<Button
-							label="OK only"
-							onPress={() => toast.alert({ title: "Hello", message: "Just an OK button." })}
+							label="Action"
+							onPress={() =>
+								toast("Photo deleted", {
+									action: { label: "Undo", onPress: () => toast.success("Restored") },
+								})
+							}
 						/>
 					</Section>
 
