@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Toaster, toast } from "crispy-toast/web";
 import type { Theme, ToastPosition } from "crispy-toast/web";
@@ -13,10 +13,40 @@ const POSITIONS: ToastPosition[] = [
 ];
 const THEMES: Theme[] = ["system", "light", "dark"];
 
+// README screenshots: `?screenshot` shows a fixed set of toasts, `?screenshot=light|dark` also hides the controls.
+const SCREENSHOT = new URLSearchParams(location.search).get("screenshot");
+const HERO_THEME = SCREENSHOT === "light" || SCREENSHOT === "dark" ? SCREENSHOT : null;
+
+function showScreenshotToasts() {
+	toast.success("Saved", {
+		id: "saved",
+		description: "Your changes are safe.",
+		duration: Infinity,
+	});
+	toast.loading("Uploading…", { id: "uploading" });
+	toast("Photo deleted", {
+		id: "deleted",
+		duration: Infinity,
+		action: { label: "Undo", onPress: () => {} },
+	});
+}
+
 export function App() {
 	const [position, setPosition] = useState<ToastPosition>("bottom-center");
 	const [theme, setTheme] = useState<Theme>("system");
 	const [customColors, setCustomColors] = useState(false);
+
+	useEffect(() => {
+		if (SCREENSHOT !== null) showScreenshotToasts();
+	}, []);
+
+	if (HERO_THEME) {
+		return (
+			<div style={{ height: "100vh", background: HERO_THEME === "dark" ? "#0A0A0A" : "#F4F4F5" }}>
+				<Toaster theme={HERO_THEME} offset={42} />
+			</div>
+		);
+	}
 
 	return (
 		<main style={{ maxWidth: 640, margin: "0 auto", padding: 24 }}>
