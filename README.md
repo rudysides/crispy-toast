@@ -214,7 +214,7 @@ pnpm --filter crispy-toast-example-vite dev
 pnpm --filter crispy-toast-example-next dev
 ```
 
-`examples/windows` is built only in CI, because react-native-windows needs Visual Studio. Run the workflow with `gh workflow run windows.yml` and download the screenshot of the running app with `gh run download -n windows-screenshot`.
+`examples/windows` is built only in CI, because react-native-windows needs Visual Studio. Run the workflow with `gh workflow run windows.yml` and download the screenshot of the running app with `gh run download -n windows-screenshot -D windows-screenshot`.
 
 ## License
 
