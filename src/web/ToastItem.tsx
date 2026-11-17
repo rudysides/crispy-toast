@@ -25,8 +25,9 @@ export function ToastItem({
 	toastStyle,
 }: ToastItemProps) {
 	const [hovered, setHovered] = useState(false);
+	const [focused, setFocused] = useState(false);
 
-	useToastTimer(toast, duration, hovered);
+	useToastTimer(toast, duration, hovered || focused);
 
 	useEffect(() => {
 		if (!toast.dismissed) return;
@@ -41,17 +42,36 @@ export function ToastItem({
 
 	if (hidden) return null;
 
+	const press = () => {
+		toast.onPress?.();
+		store.dismiss(toast.id);
+	};
+
 	return (
 		<li
 			data-crispy-toast=""
 			data-type={toast.type}
 			data-state={toast.dismissed ? "closed" : "open"}
+			// Focusable so keyboard users can press (Enter, Space) or dismiss (Escape) it.
+			tabIndex={0}
 			style={{ ...toastStyle, ...toast.style }}
 			onPointerEnter={(event) => event.pointerType === "mouse" && setHovered(true)}
 			onPointerLeave={() => setHovered(false)}
-			onClick={() => {
-				toast.onPress?.();
-				store.dismiss(toast.id);
+			onFocus={() => setFocused(true)}
+			onBlur={(event) => {
+				if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
+			}}
+			onClick={press}
+			onKeyDown={(event) => {
+				if (event.key === "Escape") {
+					store.dismiss(toast.id);
+				} else if (
+					event.target === event.currentTarget &&
+					(event.key === "Enter" || event.key === " ")
+				) {
+					event.preventDefault();
+					press();
+				}
 			}}
 		>
 			<Icon type={toast.type} icon={resolveIcon(toast, icons)} />
@@ -65,6 +85,21 @@ export function ToastItem({
 					</div>
 				) : null}
 			</div>
+			{toast.action ? (
+				<button
+					type="button"
+					data-action=""
+					style={textStyle}
+					onClick={(event) => {
+						// Keeps the toast's own onPress from firing too.
+						event.stopPropagation();
+						toast.action?.onPress();
+						store.dismiss(toast.id);
+					}}
+				>
+					{toast.action.label}
+				</button>
+			) : null}
 		</li>
 	);
 }

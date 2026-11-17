@@ -6,26 +6,22 @@ export const palettes: Record<"light" | "dark", ToasterColors> = {
 		text: "#111111",
 		muted: "#6B6B6B",
 		border: "rgba(0, 0, 0, 0.08)",
-		overlay: "rgba(0, 0, 0, 0.4)",
-		accent: "#007AFF",
-		destructive: "#FF3B30",
 		success: "#34C759",
 		error: "#FF3B30",
 		warning: "#FF9500",
 		info: "#007AFF",
+		loading: "#8E8E93",
 	},
 	dark: {
 		background: "#1C1C1E",
 		text: "#F5F5F7",
 		muted: "#A1A1A6",
 		border: "rgba(255, 255, 255, 0.1)",
-		overlay: "rgba(0, 0, 0, 0.6)",
-		accent: "#0A84FF",
-		destructive: "#FF453A",
 		success: "#30D158",
 		error: "#FF453A",
 		warning: "#FF9F0A",
 		info: "#0A84FF",
+		loading: "#98989D",
 	},
 };
 
@@ -36,7 +32,8 @@ export function resolveColors(
 	return { ...palettes[scheme], ...overrides };
 }
 
-export const ICON_GLYPHS: Record<Exclude<ToastType, "default">, string> = {
+/** Built-in glyphs. `default` has no icon and `loading` shows a spinner. */
+export const ICON_GLYPHS: Record<Exclude<ToastType, "default" | "loading">, string> = {
 	success: "✓",
 	error: "✕",
 	warning: "!",

@@ -8,7 +8,6 @@ import type {
 	ToasterColors,
 	ToasterIcons,
 } from "../core/types.js";
-import { AlertDialog } from "./AlertDialog.js";
 import { CSS, toCssVars } from "./styles.js";
 import { ToastItem } from "./ToastItem.js";
 
@@ -23,10 +22,9 @@ export interface ToasterProps {
 	colors?: Partial<ToasterColors>;
 	/** Replaces the built-in icon per type, e.g. `{ success: CheckIcon }`. */
 	icons?: ToasterIcons;
-	/** Applied to every text in toasts and alerts. */
+	/** Applied to every text in toasts. */
 	textStyle?: CSSProperties;
 	toastStyle?: CSSProperties;
-	alertStyle?: CSSProperties;
 }
 
 export function Toaster({
@@ -39,9 +37,8 @@ export function Toaster({
 	icons,
 	textStyle,
 	toastStyle,
-	alertStyle,
 }: ToasterProps) {
-	const { toasts, alerts } = useToasterState();
+	const { toasts } = useToasterState();
 	const { vertical, horizontal } = parsePosition(position);
 	const vars = colors ? toCssVars(colors) : undefined;
 
@@ -75,13 +72,6 @@ export function Toaster({
 					))}
 				</ol>
 			</section>
-			<AlertDialog
-				alert={alerts[0]}
-				theme={theme}
-				vars={vars}
-				textStyle={textStyle}
-				alertStyle={alertStyle}
-			/>
 		</>
 	);
 }

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { isIconComponent } from "../core/icon.js";
 import { ICON_GLYPHS } from "../core/theme.js";
 import type { ToastIcon, ToastType, ToasterColors } from "../core/types.js";
@@ -15,6 +15,17 @@ export function Icon({
 }) {
 	if (icon === undefined) {
 		if (type === "default") return null;
+		if (type === "loading") {
+			return (
+				<View
+					accessibilityElementsHidden
+					importantForAccessibility="no-hide-descendants"
+					style={styles.icon}
+				>
+					<ActivityIndicator size="small" color={colors.loading} />
+				</View>
+			);
+		}
 		return (
 			<View
 				accessibilityElementsHidden

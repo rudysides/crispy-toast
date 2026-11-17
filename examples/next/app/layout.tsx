@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 		<html lang="en">
 			<body style={{ margin: 0, fontFamily: "system-ui, sans-serif" }}>
 				{children}
-				<Toaster position="top-center" />
+				<Toaster position="bottom-center" />
 			</body>
 		</html>
 	);

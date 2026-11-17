@@ -45,10 +45,12 @@ export function ToastItem({
 }: ToastItemProps) {
 	const [progress] = useState(() => new Animated.Value(0));
 	const [drag] = useState(() => new Animated.Value(0));
+	// Only fires with a pointer: react-native-web, macOS and Windows.
+	const [hovered, setHovered] = useState(false);
 	// Swiping towards the nearest screen edge dismisses: up for top toasts, down for bottom ones.
 	const direction = vertical === "top" ? -1 : 1;
 
-	useToastTimer(toast, duration, false);
+	useToastTimer(toast, duration, hovered);
 
 	useEffect(() => {
 		if (toast.dismissed && hidden) {
@@ -120,6 +122,8 @@ export function ToastItem({
 					toast.onPress?.();
 					store.dismiss(toast.id);
 				}}
+				onHoverIn={() => setHovered(true)}
+				onHoverOut={() => setHovered(false)}
 				style={[
 					styles.toast,
 					{ backgroundColor: colors.background, borderColor: colors.border },
@@ -136,6 +140,24 @@ export function ToastItem({
 						</Text>
 					) : null}
 				</View>
+				{toast.action ? (
+					<Pressable
+						accessibilityRole="button"
+						onPress={() => {
+							toast.action?.onPress();
+							store.dismiss(toast.id);
+						}}
+						style={({ pressed }) => [
+							styles.action,
+							{ backgroundColor: colors.border },
+							pressed && styles.actionPressed,
+						]}
+					>
+						<Text style={[styles.actionText, { color: colors.text }, textStyle]}>
+							{toast.action.label}
+						</Text>
+					</Pressable>
+				) : null}
 			</Pressable>
 		</Animated.View>
 	);
@@ -167,5 +189,17 @@ const styles = StyleSheet.create({
 	description: {
 		fontSize: 13,
 		lineHeight: 18,
+	},
+	action: {
+		paddingVertical: 6,
+		paddingHorizontal: 12,
+		borderRadius: 8,
+	},
+	actionPressed: {
+		opacity: 0.6,
+	},
+	actionText: {
+		fontSize: 13,
+		fontWeight: "600",
 	},
 });
