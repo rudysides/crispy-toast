@@ -136,7 +136,7 @@ function Button({
 const styles = StyleSheet.create({
 	screen: { flex: 1, backgroundColor: "#F2F2F7" },
 	content: { padding: 16, gap: 24 },
-	heading: { fontSize: 28, fontWeight: "700" },
+	heading: { fontSize: 28, fontWeight: "700", color: "#111111" },
 	section: { gap: 8 },
 	sectionTitle: { fontSize: 13, fontWeight: "600", color: "#6B6B6B", textTransform: "uppercase" },
 	row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
