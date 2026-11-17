@@ -1,0 +1,104 @@
+import { useContext } from "react";
+import { Platform, StyleSheet, View, useColorScheme } from "react-native";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
+import { SafeAreaInsetsContext } from "react-native-safe-area-context";
+import { useToasterState } from "../core/hooks.js";
+import { parsePosition, resolveColors } from "../core/theme.js";
+import type {
+	Theme,
+	ToastData,
+	ToastPosition,
+	ToasterColors,
+	ToasterIcons,
+} from "../core/types.js";
+import { AlertModal } from "./AlertModal.js";
+import { ToastItem } from "./ToastItem.js";
+
+export interface ToasterProps {
+	position?: ToastPosition;
+	/** Default duration in milliseconds. */
+	duration?: number;
+	visibleToasts?: number;
+	/** Distance from the safe area edge. */
+	offset?: number;
+	theme?: Theme;
+	colors?: Partial<ToasterColors>;
+	/** Replaces the built-in icon per type, e.g. `{ success: CheckIcon }`. */
+	icons?: ToasterIcons;
+	/** Applied to every text in toasts and alerts, e.g. `{ fontFamily: "Inter" }`. */
+	textStyle?: StyleProp<TextStyle>;
+	toastStyle?: StyleProp<ViewStyle>;
+	alertStyle?: StyleProp<ViewStyle>;
+}
+
+const ALIGN = { left: "flex-start", center: "center", right: "flex-end" } as const;
+
+export function Toaster({
+	position = "top-center",
+	duration = 4000,
+	visibleToasts = 3,
+	offset = 16,
+	theme = "system",
+	colors,
+	icons,
+	textStyle,
+	toastStyle,
+	alertStyle,
+}: ToasterProps) {
+	const { toasts, alerts } = useToasterState();
+	const systemScheme = useColorScheme();
+	// Read the context directly so a missing SafeAreaProvider falls back to 0 instead of throwing.
+	const insets = useContext(SafeAreaInsetsContext);
+	const scheme = theme === "system" ? (systemScheme === "dark" ? "dark" : "light") : theme;
+	const palette = resolveColors(scheme, colors);
+	const { vertical, horizontal } = parsePosition(position);
+
+	return (
+		<>
+			<View
+				style={[
+					styles.container,
+					vertical === "top"
+						? { top: (insets?.top ?? 0) + offset }
+						: { bottom: (insets?.bottom ?? 0) + offset, flexDirection: "column-reverse" },
+					{ alignItems: ALIGN[horizontal] },
+				]}
+			>
+				{toasts.map((toast, index) => (
+					<ToastItem
+						key={toast.id}
+						// The native `toast` export only accepts native styles.
+						toast={toast as ToastData<StyleProp<ViewStyle>>}
+						hidden={index >= visibleToasts}
+						duration={duration}
+						vertical={vertical}
+						colors={palette}
+						icons={icons}
+						textStyle={textStyle}
+						toastStyle={toastStyle}
+					/>
+				))}
+			</View>
+			<AlertModal
+				alert={alerts[0]}
+				colors={palette}
+				textStyle={textStyle}
+				alertStyle={alertStyle}
+			/>
+		</>
+	);
+}
+
+const styles = StyleSheet.create({
+	container: {
+		// `fixed` keeps toasts in view while the page scrolls on react-native-web.
+		position: Platform.OS === "web" ? ("fixed" as "absolute") : "absolute",
+		left: 0,
+		right: 0,
+		flexDirection: "column",
+		gap: 8,
+		paddingHorizontal: 16,
+		zIndex: 9999,
+		pointerEvents: "box-none",
+	},
+});
