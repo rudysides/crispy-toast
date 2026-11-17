@@ -31,9 +31,16 @@ jobs:
           npm install ../../crispy-toast.tgz
           npx react-native init-windows --overwrite --logging
 
+      # The generated project targets a fixed Windows SDK that the runner image may not have, so build against the newest installed one.
       - name: Build and launch
         working-directory: examples/windows
-        run: npx react-native run-windows --release --logging
+        shell: pwsh
+        run: |
+          $sdk = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\Include" -Directory |
+            Where-Object { Test-Path "$($_.FullName)\um\windows.h" } |
+            Sort-Object { [version]$_.Name } | Select-Object -Last 1 -ExpandProperty Name
+          Write-Host "Using Windows SDK $sdk"
+          npx react-native run-windows --release --logging --msbuildprops "WindowsTargetPlatformVersion=$sdk"
 
       - name: Screenshot
         if: always()
