@@ -17,8 +17,8 @@ import { resolveIcon } from "../core/icon.js";
 import { ENTER_MS, EXIT_MS } from "../core/theme.js";
 import type { ToastData, ToasterColors, ToasterIcons } from "../core/types.js";
 import { Icon } from "./Icon.js";
+import { useNativeDriver } from "./platform.js";
 
-const useNativeDriver = Platform.OS !== "web";
 const SWIPE_DISTANCE = 40;
 const SWIPE_VELOCITY = 0.5;
 
