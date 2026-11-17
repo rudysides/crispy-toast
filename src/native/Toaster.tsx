@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import { Platform, StyleSheet, View, useColorScheme } from "react-native";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
-import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 import { useToasterState } from "../core/hooks.js";
 import { parsePosition, resolveColors } from "../core/theme.js";
 import type {
@@ -12,6 +10,9 @@ import type {
 	ToasterIcons,
 } from "../core/types.js";
 import { AlertModal } from "./AlertModal.js";
+// No extension, so Metro picks insets.macos.js / insets.windows.js there and the app
+// doesn't need react-native-safe-area-context on desktop.
+import { useInsets } from "./insets";
 import { ToastItem } from "./ToastItem.js";
 
 export interface ToasterProps {
@@ -47,8 +48,7 @@ export function Toaster({
 }: ToasterProps) {
 	const { toasts, alerts } = useToasterState();
 	const systemScheme = useColorScheme();
-	// Read the context directly so a missing SafeAreaProvider falls back to 0 instead of throwing.
-	const insets = useContext(SafeAreaInsetsContext);
+	const insets = useInsets();
 	const scheme = theme === "system" ? (systemScheme === "dark" ? "dark" : "light") : theme;
 	const palette = resolveColors(scheme, colors);
 	const { vertical, horizontal } = parsePosition(position);
@@ -59,8 +59,8 @@ export function Toaster({
 				style={[
 					styles.container,
 					vertical === "top"
-						? { top: (insets?.top ?? 0) + offset }
-						: { bottom: (insets?.bottom ?? 0) + offset, flexDirection: "column-reverse" },
+						? { top: insets.top + offset }
+						: { bottom: insets.bottom + offset, flexDirection: "column-reverse" },
 					{ alignItems: ALIGN[horizontal] },
 				]}
 			>

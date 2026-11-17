@@ -251,9 +251,6 @@ importers:
       react-native-macos:
         specifier: 0.81.9
         version: 0.81.9(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react-native@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.1.4)(supports-color@8.1.1))(react@19.1.4)(supports-color@8.1.1)
-      react-native-safe-area-context:
-        specifier: ~5.11.1
-        version: 5.11.1(react-native@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.1.4)(supports-color@8.1.1))(react@19.1.4)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -8858,11 +8855,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  react-native-safe-area-context@5.11.1(react-native@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.1.4)(supports-color@8.1.1))(react@19.1.4):
-    dependencies:
-      react: 19.1.4
-      react-native: 0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.81.6(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.1.4)(supports-color@8.1.1)
 
   react-native-safe-area-context@5.11.1(react-native@0.88.1(@babel/core@7.29.13(supports-color@8.1.1))(@react-native-community/cli@20.0.0(supports-color@8.1.1)(typescript@6.0.3))(@types/react@19.3.0)(react@19.3.0)(supports-color@8.1.1))(react@19.3.0):
     dependencies:

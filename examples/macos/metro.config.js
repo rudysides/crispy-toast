@@ -6,13 +6,7 @@ const root = path.resolve(__dirname, "../..");
 // crispy-toast is linked from the repo root, which has its own React and React Native.
 // Resolve these from this app so the bundle has exactly one copy of each.
 // @babel/runtime is here because Babel adds helper imports to the linked dist files.
-const appModules = [
-	"react",
-	"react-native",
-	"react-native-macos",
-	"react-native-safe-area-context",
-	"@babel/runtime",
-];
+const appModules = ["react", "react-native", "react-native-macos", "@babel/runtime"];
 
 const defaultConfig = getDefaultConfig(__dirname);
 // The CLI's resolver redirects react-native to react-native-macos; keep it in the chain.
