@@ -12,6 +12,8 @@
 		"toast",
 		"windows"
 	],
+	"homepage": "https://github.com/rudysides/crispy-toast#readme",
+	"bugs": "https://github.com/rudysides/crispy-toast/issues",
 	"license": "MIT",
 	"author": "BitWebs",
 	"repository": {

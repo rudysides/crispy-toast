@@ -68,6 +68,13 @@ toast.warning("Battery is low");
 toast.info("New version available");
 ```
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/hero-dark.png" />
+    <img src="docs/screenshots/hero-light.png" alt="Success, loading and action toasts" width="600" />
+  </picture>
+</p>
+
 In the Next.js App Router, put `<Toaster />` in your root `layout.tsx`. The web entry is already marked `"use client"`.
 
 ### Update and dismiss
@@ -213,6 +220,8 @@ pnpm --filter crispy-toast-example-macos macos
 pnpm --filter crispy-toast-example-vite dev
 pnpm --filter crispy-toast-example-next dev
 ```
+
+The README images come from the Vite example: open it with `?screenshot=light` or `?screenshot=dark`.
 
 `examples/windows` is built only in CI, because react-native-windows needs Visual Studio. Run the workflow with `gh workflow run windows.yml` and download the screenshot of the running app with `gh run download -n windows-screenshot -D windows-screenshot`.
 
