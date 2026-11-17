@@ -1,0 +1,28 @@
+{
+	"name": "crispy-toast-example-macos",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"start": "react-native start",
+		"macos": "react-native run-macos",
+		"pods": "pod install --project-directory=macos"
+	},
+	"dependencies": {
+		"crispy-toast": "workspace:*",
+		"react": "19.1.4",
+		"react-native": "0.81.6",
+		"react-native-macos": "0.81.9",
+		"react-native-safe-area-context": "~5.11.1"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.25.2",
+		"@babel/runtime": "^7.25.0",
+		"@react-native-community/cli": "20.0.0",
+		"@react-native-community/cli-platform-ios": "20.0.0",
+		"@react-native/babel-preset": "0.81.6",
+		"@react-native/metro-config": "0.81.6",
+		"@react-native/typescript-config": "0.81.6",
+		"@types/react": "^19.1.0",
+		"typescript": "^5.8.3"
+	}
+}
