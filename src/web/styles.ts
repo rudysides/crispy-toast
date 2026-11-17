@@ -48,7 +48,7 @@ ${themed("dark")}{${declarations(palettes.dark)}}
 @starting-style{:where([data-crispy-toast]){opacity:0;transform:translateY(var(--ct-from))}}
 :where([data-crispy-toast] [data-icon]){flex:none;display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;color:#fff;font-size:13px;font-weight:700;line-height:1}
 ${iconColors}
-:where([data-crispy-toast] [data-icon][data-custom]){background:none;border-radius:0;color:var(--ct-text)}
+:where([data-crispy-toast] [data-icon][data-custom]){background:none;border-radius:0;color:var(--ct-text);font-size:18px;font-weight:400}
 ${customIconColors}
 :where([data-crispy-toast] [data-content]){display:flex;flex-direction:column;gap:2px;min-width:0}
 :where([data-crispy-toast] [data-title]){font-size:15px;font-weight:600;line-height:1.35}
