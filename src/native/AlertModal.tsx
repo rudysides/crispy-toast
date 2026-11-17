@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { Animated, Easing, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { store } from "../core/store.js";
-import { ENTER_MS } from "../core/theme.js";
+import { ENTER_MS, EXIT_MS } from "../core/theme.js";
 import type { AlertButton, AlertData, ToasterColors } from "../core/types.js";
+import { useNativeDriver } from "./platform.js";
 
-const useNativeDriver = Platform.OS !== "web";
 const ORIENTATIONS = [
 	"portrait",
 	"portrait-upside-down",
@@ -54,13 +55,8 @@ export function AlertModal({ alert, colors, textStyle, alertStyle }: AlertModalP
 	};
 
 	return (
-		<Modal
+		<Overlay
 			visible={alert !== undefined}
-			transparent
-			animationType="fade"
-			statusBarTranslucent
-			navigationBarTranslucent
-			supportedOrientations={ORIENTATIONS}
 			// Android back button behaves like the cancel button, if there is one.
 			onRequestClose={() => cancel && press(cancel)}
 		>
@@ -115,11 +111,72 @@ export function AlertModal({ alert, colors, textStyle, alertStyle }: AlertModalP
 					</View>
 				</Animated.View>
 			</View>
+		</Overlay>
+	);
+}
+
+interface OverlayProps {
+	visible: boolean;
+	onRequestClose: () => void;
+	children: ReactNode;
+}
+
+function ModalOverlay({ visible, onRequestClose, children }: OverlayProps) {
+	return (
+		<Modal
+			visible={visible}
+			transparent
+			animationType="fade"
+			statusBarTranslucent
+			navigationBarTranslucent
+			supportedOrientations={ORIENTATIONS}
+			onRequestClose={onRequestClose}
+		>
+			{children}
 		</Modal>
 	);
 }
 
+/** Fades in over the app from inside <Toaster>, so it covers the window when Toaster is at the root. */
+function InlineOverlay({ visible, children }: OverlayProps) {
+	const [opacity] = useState(() => new Animated.Value(0));
+	// Stay mounted until the fade-out has finished.
+	const [mounted, setMounted] = useState(visible);
+	if (visible && !mounted) setMounted(true);
+
+	useEffect(() => {
+		Animated.timing(opacity, {
+			toValue: visible ? 1 : 0,
+			duration: visible ? ENTER_MS : EXIT_MS,
+			useNativeDriver,
+		}).start(({ finished }) => {
+			if (finished && !visible) setMounted(false);
+		});
+	}, [visible, opacity]);
+
+	if (!mounted) return null;
+
+	return (
+		<Animated.View
+			style={[
+				StyleSheet.absoluteFill,
+				styles.inline,
+				{ opacity, pointerEvents: visible ? "auto" : "none" },
+			]}
+		>
+			{children}
+		</Animated.View>
+	);
+}
+
+// react-native-macos has no Modal: creating one throws, so the alert is drawn over the app instead.
+const Overlay = Platform.OS === "macos" ? InlineOverlay : ModalOverlay;
+
 const styles = StyleSheet.create({
+	inline: {
+		// Above the toasts, like the native Modal.
+		zIndex: 10000,
+	},
 	overlay: {
 		flex: 1,
 		alignItems: "center",
