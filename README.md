@@ -48,12 +48,12 @@ import { Toaster, toast } from "crispy-toast";
 import { Toaster, toast } from "crispy-toast/web";
 
 export default function App() {
-	return (
-		<>
-			<YourApp />
-			<Toaster position="top-center" />
-		</>
-	);
+  return (
+    <>
+      <YourApp />
+      <Toaster position="top-center" />
+    </>
+  );
 }
 
 toast("Hello!");
@@ -82,12 +82,12 @@ An iOS-style alert with a dimmed backdrop. The buttons work like React Native's 
 
 ```ts
 toast.alert({
-	title: "Delete photo?",
-	message: "This cannot be undone.",
-	buttons: [
-		{ text: "Cancel", style: "cancel" },
-		{ text: "Delete", style: "destructive", onPress: () => deletePhoto() },
-	],
+  title: "Delete photo?",
+  message: "This cannot be undone.",
+  buttons: [
+    { text: "Cancel", style: "cancel" },
+    { text: "Delete", style: "destructive", onPress: () => deletePhoto() },
+  ],
 });
 ```
 
@@ -152,9 +152,9 @@ Most apps only need `theme` and a couple of `colors`:
 
 ```tsx
 <Toaster
-	theme="dark"
-	colors={{ background: "#4F46E5", text: "#FFFFFF" }}
-	textStyle={{ fontFamily: "Inter" }}
+  theme="dark"
+  colors={{ background: "#4F46E5", text: "#FFFFFF" }}
+  textStyle={{ fontFamily: "Inter" }}
 />
 ```
 
@@ -175,10 +175,10 @@ For anything else, use `toastStyle`, `alertStyle` or a per-toast `style`. Styles
 
 ```css
 [data-crispy-toaster] {
-	--ct-background: black;
+  --ct-background: black;
 }
 [data-crispy-toast] {
-	border-radius: 4px;
+  border-radius: 4px;
 }
 ```
 
