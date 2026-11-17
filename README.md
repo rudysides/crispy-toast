@@ -68,14 +68,14 @@ toast.warning("Battery is low");
 toast.info("New version available");
 ```
 
+In the Next.js App Router, put `<Toaster />` in your root `layout.tsx`. The web entry is already marked `"use client"`.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/hero-dark.png" />
     <img src="docs/screenshots/hero-light.png" alt="Success, loading and action toasts" width="600" />
   </picture>
 </p>
-
-In the Next.js App Router, put `<Toaster />` in your root `layout.tsx`. The web entry is already marked `"use client"`.
 
 ### Update and dismiss
 
