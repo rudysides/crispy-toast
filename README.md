@@ -36,6 +36,16 @@ npm i crispy-toast
 
 No CSS import needed: `<Toaster />` ships its own styles.
 
+### macOS and Windows (experimental)
+
+```sh
+npm i crispy-toast
+```
+
+That's it: desktop windows have no safe area, so `react-native-safe-area-context` isn't used there.
+
+react-native-macos has no `Modal`, so there the alert is drawn inside `<Toaster />`. Render `<Toaster />` at the root of your app so the alert covers the whole window. Escape doesn't close the alert on macOS yet.
+
 ## Usage
 
 Render `<Toaster />` once at the root of your app, then call `toast()` from anywhere.
@@ -188,7 +198,9 @@ For anything else, use `toastStyle`, `alertStyle` or a per-toast `style`. Styles
 
 ```sh
 pnpm install
-pnpm test        # unit tests (store, timer)
+pnpm test        # unit tests (store, timer, icons)
+pnpm lint        # oxlint
+pnpm format      # oxfmt
 pnpm build       # compile to dist/
 pnpm dev         # compile in watch mode
 ```
