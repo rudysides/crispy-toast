@@ -1,0 +1,54 @@
+# Builds examples/windows with react-native-windows and uploads a screenshot of the running app.
+# Run it manually: `gh workflow run windows.yml`, then `gh run download -n windows-screenshot`.
+name: Windows
+
+on: workflow_dispatch
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Build and pack crispy-toast
+        run: |
+          pnpm install --frozen-lockfile --filter crispy-toast
+          pnpm build
+          pnpm pack --out crispy-toast.tgz
+
+      - name: Install example and generate the Windows project
+        working-directory: examples/windows
+        run: |
+          npm install
+          npm install ../../crispy-toast.tgz
+          npx react-native init-windows --overwrite --logging
+
+      - name: Build and launch
+        working-directory: examples/windows
+        run: npx react-native run-windows --release --logging
+
+      - name: Screenshot
+        if: always()
+        shell: pwsh
+        run: |
+          Start-Sleep -Seconds 20
+          Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+          $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+          $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+          $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+          $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+          $bitmap.Save("screenshot.png")
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-screenshot
+          path: screenshot.png

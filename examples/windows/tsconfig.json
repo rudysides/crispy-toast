@@ -1,0 +1,19 @@
+{
+	// Standalone: this example isn't in the pnpm workspace and has no node_modules locally,
+	// so react and react-native resolve from the repo root and crispy-toast from its source.
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"strict": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"types": [],
+		"paths": {
+			"crispy-toast": ["../../src/native/index.ts"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx"],
+	"exclude": ["**/node_modules", "windows"]
+}

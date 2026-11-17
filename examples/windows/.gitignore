@@ -1,0 +1,5 @@
+# Generated in CI by `react-native init-windows`.
+windows/
+node_modules/
+package-lock.json
+.metro-health-check*
