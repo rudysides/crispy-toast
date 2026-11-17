@@ -35,7 +35,7 @@ export interface ToasterProps {
 const ALIGN = { left: "flex-start", center: "center", right: "flex-end" } as const;
 
 export function Toaster({
-	position = "top-center",
+	position = "bottom-center",
 	duration = 4000,
 	visibleToasts = 3,
 	offset = 16,
