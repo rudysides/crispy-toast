@@ -21,7 +21,11 @@ export default function App() {
 
 	// Shows a toast on launch so the CI screenshot has something to check.
 	useEffect(() => {
-		const timer = setTimeout(() => toast.success("Hello from Windows"), 2000);
+		// Stays until dismissed, because the screenshot is taken well after the default 4s duration.
+		const timer = setTimeout(
+			() => toast.success("Hello from Windows", { duration: Infinity }),
+			2000,
+		);
 		return () => clearTimeout(timer);
 	}, []);
 
