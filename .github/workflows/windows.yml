@@ -1,5 +1,5 @@
 # Builds examples/windows with react-native-windows and uploads a screenshot of the running app.
-# Run it manually: `gh workflow run windows.yml`, then `gh run download -n windows-screenshot`.
+# Run it manually: `gh workflow run windows.yml`, then `gh run download -n windows-screenshot -D windows-screenshot`.
 name: Windows
 
 on: workflow_dispatch
