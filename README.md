@@ -8,6 +8,26 @@
   One toast API for every platform.
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/crispy-toast"><img src="https://img.shields.io/npm/v/crispy-toast?style=flat-square&logo=npm&logoColor=white&color=cb3837" alt="npm version" /></a>
+  <a href="https://github.com/rudysides/crispy-toast/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/rudysides/crispy-toast/ci.yml?branch=main&style=flat-square&logo=github&label=CI" alt="CI status" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e?style=flat-square" alt="License: MIT" /></a>
+  <img src="https://img.shields.io/badge/dependencies-0-22c55e?style=flat-square" alt="Zero runtime dependencies" />
+  <img src="https://img.shields.io/badge/TypeScript-ready-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript ready" />
+  <a href="https://expo.dev/go"><img src="https://img.shields.io/badge/Expo%20Go-compatible-000020?style=flat-square&logo=expo&logoColor=white" alt="Works in Expo Go" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/iOS-111111?style=flat-square&logo=apple&logoColor=white" alt="iOS" />
+  <img src="https://img.shields.io/badge/Android-3ddc84?style=flat-square&logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Web-4285f4?style=flat-square&logo=html5&logoColor=white" alt="Web" />
+  <img src="https://img.shields.io/badge/macOS-111111?style=flat-square&logo=apple&logoColor=white" alt="macOS" />
+  <img src="https://img.shields.io/badge/Windows-0078d4?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0wIDBoMTEuNHYxMS40SDB6TTEyLjYgMEgyNHYxMS40SDEyLjZ6TTAgMTIuNmgxMS40VjI0SDB6TTEyLjYgMTIuNkgyNFYyNEgxMi42eiIvPjwvc3ZnPg==" alt="Windows" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js" />
+</p>
+
+<br />
+
 Write a toast once and show it on **iOS, Android, web, macOS and Windows**.
 
 Zero runtime dependencies, no native code (works in Expo Go).
