@@ -22,10 +22,10 @@ Zero runtime dependencies, no native code (works in Expo Go).
 ### Expo / React Native
 
 ```sh
-npx expo install crispy-toast react-native-safe-area-context
+npx expo install crispy-toast
 ```
 
-`react-native-safe-area-context` is included in all Expo templates by default.
+Requires the peer dependency `react-native-safe-area-context`, which every Expo template already includes. If your app doesn't have it, run `npx expo install react-native-safe-area-context`.
 
 ### Next.js / Vite
 
