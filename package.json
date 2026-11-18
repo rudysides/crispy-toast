@@ -1,7 +1,7 @@
 {
 	"name": "crispy-toast",
-	"version": "1.0.0",
-	"description": "Native toasts for every platform",
+	"version": "1.0.1",
+	"description": "One toast API for every platform",
 	"keywords": [
 		"expo",
 		"macos",
