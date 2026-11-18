@@ -5,10 +5,10 @@
 <h1 align="center">Crispy Toast</h1>
 
 <p align="center">
-  Native toasts for every platform.
+  One toast API for every platform.
 </p>
 
-Toasts with **one API everywhere**: iOS, Android, web, macOS and Windows.
+Write a toast once and show it on **iOS, Android, web, macOS and Windows**.
 
 Zero runtime dependencies, no native code (works in Expo Go).
 
