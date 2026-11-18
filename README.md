@@ -14,7 +14,6 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e?style=flat-square" alt="License: MIT" /></a>
   <img src="https://img.shields.io/badge/dependencies-0-22c55e?style=flat-square" alt="Zero runtime dependencies" />
   <img src="https://img.shields.io/badge/TypeScript-ready-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript ready" />
-  <a href="https://expo.dev/go"><img src="https://img.shields.io/badge/Expo%20Go-compatible-000020?style=flat-square&logo=expo&logoColor=white" alt="Works in Expo Go" /></a>
 </p>
 
 <p align="center">
